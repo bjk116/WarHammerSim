@@ -22,40 +22,54 @@ public class Main {
     }
 }
 
-class Game {
+class Game  extends JFrame {
     public Game() {
-        JFrame frame = new JFrame("WarHammer Sim40k");
+        super("WarHammer 40k Simulator");
         SplashScreenLayout SSL = new SplashScreenLayout();
-        frame.setSize(new Dimension(800,800));
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.getContentPane().add(SSL);
-        frame.setVisible(true);
+        setSize(new Dimension(200,200));
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        getContentPane().add(SSL);
+        setVisible(true);
     }
 }
 
 class SplashScreenLayout extends JPanel {
+    OptionsWindow optionsWindow;
+
     public SplashScreenLayout() {
         super(new MigLayout("al center center, wrap 1"));
         JLabel title = new JLabel("KillTeam Simulator 1.0");
         JButton newGame = new JButton("NEW GAME");
+        JButton newSim = new JButton("NEW SIMULATION");
         JButton options = new JButton("OPTIONS");
         JButton exit = new JButton("EXIT");
-        this.add(title,"grow");
-        this.add(newGame,"grow");
-        this.add(options,"grow");
-        this.add(exit,"grow");
-        //The cool new way we can do it with lambda, as actionPerformed is the default actionListened event for a button.
+        add(title,"grow");
+        add(newGame,"grow");
+        add(newSim);
+        add(options,"grow");
+        add(exit,"grow");
+        //The cool new way we can do it with lambda, as actionPerformed is the default actionListened event for a button I guess?
         newGame.addActionListener(e -> pressedNewGame());
+        newSim.addActionListener(e -> pressedNewSim());
         options.addActionListener(e -> pressedOptions());
         exit.addActionListener(e -> pressedExit());
     }
 
+    private void pressedNewSim() {
+        SwingUtilities.invokeLater(() -> new SimulationWindow());
+    }
+
     public void pressedNewGame() {
-        System.out.println("Making new game");
+        SwingUtilities.invokeLater(() -> new BoardGame());
+//        System.out.println("Making new game");
     }
 
     public void pressedOptions() {
-        System.out.println("Pressed options");
+        System.out.println("Setting current panel invisible");
+        setVisible(false);
+        System.out.println("Showing options panel");
+        optionsWindow.setVisible(true);
+        System.out.println("Done");
     }
 
     public void pressedExit() {
@@ -68,6 +82,9 @@ class OptionsWindow extends JPanel {
     public OptionsWindow() {
         super(new MigLayout("al center center, wrap 1"));
         JLabel title = new JLabel("Options");
-        this.add(title);
+        add(title, "span");
+        JLabel someText = new JLabel("Some text");
+        add(someText, "span");
+        System.out.println("Made Options JPanel");
     }
 }
